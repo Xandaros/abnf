@@ -1,3 +1,15 @@
+{-|
+Module      : Text.ABNF.Parser
+Description : ABNF Parser
+Copyright   : (c) Martin Zeller, 2016
+License     : BSD2
+Maintainer  : Martin Zeller <mz.bremerhaven@gmail.com>
+Stability   : experimental
+Portability : portable
+
+This module provides facilities to parse ABNF documents.
+To parse documents using ABNF, see "Text.ABNF.Document.Parser"
+-}
 module Text.ABNF.Parser where
 
 import Prelude hiding (repeat)
