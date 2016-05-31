@@ -20,7 +20,8 @@ library
                        Text.ABNF.Parser.Types,
                        Text.ABNF.Canonicalizer,
                        Text.ABNF.Document,
-                       Text.ABNF.Document.Types
+                       Text.ABNF.Document.Types,
+                       Text.ABNF.PrettyPrinter
   ghc-options:         -W
   -- other-modules:       
   -- other-extensions:    
