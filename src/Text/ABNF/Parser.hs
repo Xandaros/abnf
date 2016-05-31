@@ -86,7 +86,7 @@ repeat = try asteriskNumbers <|> try singleNumber <|> pure (Repeat 1 (Just 1))
             pure $ Repeat firstNumber secondNumber
 
 element :: Parser Element
-element = RuleElement <$> identifier
+element = RuleElement' <$> identifier
       <|> GroupElement <$> group
       <|> OptionElement <$> option_
       <|> LiteralElement <$> literal

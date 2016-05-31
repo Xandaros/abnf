@@ -31,7 +31,8 @@ data Repetition = Repetition Repeat Element
 data Repeat = Repeat Int (Maybe Int)
     deriving (Show)
 
-data Element = RuleElement Identifier
+data Element = RuleElement' Identifier
+             | RuleElement Rule
              | GroupElement Group
              | OptionElement Group
              | LiteralElement Literal

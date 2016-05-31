@@ -13,7 +13,9 @@ import qualified Data.Text as Text
 
 type Identifier = Text.Text
 
-data Document = Document Identifier Content
+data Document = Document Identifier [Content]
+    deriving (Show)
 
 data Content = Terminal Text.Text
-             | NonTerminal [Document]
+             | NonTerminal Document
+             deriving (Show)
