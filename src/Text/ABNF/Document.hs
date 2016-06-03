@@ -11,16 +11,14 @@ Portability : non-portable
 
 module Text.ABNF.Document (generateParser) where
 
-import Control.Applicative (liftA2)
-import Control.Monad (join)
+import Control.Applicative (liftA2, (<|>), many)
+import Control.Monad (join, mzero)
 import Data.Char (chr)
 import Data.Foldable (asum)
 import Data.Monoid ((<>))
 
 import qualified Data.Text as Text
-import Text.Megaparsec
---import Text.Megaparsec.Char
-import Text.Megaparsec.Text
+import Data.Attoparsec.Text
 
 import Text.ABNF.Parser.Types
 import Text.ABNF.Document.Types
@@ -31,7 +29,8 @@ generateParser :: Rule -> Parser Document
 generateParser = parseRule
 
 parseRule :: Rule -> Parser Document
-parseRule (Rule ident _ spec) = Document ident <$> parseSumSpec spec <?> "Rule"
+parseRule (Rule ident _ spec) = Document ident <$>
+    (traceM ("Rule: " ++ Text.unpack ident) *> parseSumSpec spec <?> "Rule")
 
 parseSumSpec :: SumSpec -> Parser [Content]
 parseSumSpec (SumSpec prodspecs) = asum (map parseProdSpec prodspecs) <?> "Sum"
@@ -48,11 +47,15 @@ parseRepetition (Repetition (Repeat 0 Nothing) elem) =
 parseRepetition (Repetition (Repeat 0 (Just 0)) _) = pure []
 -- Less than n times
 parseRepetition (Repetition (Repeat 0 (Just n)) elem) = do
-    el <- try (Just <$> parseElem elem) <|> pure Nothing
+    el <- (Just <$> parseElem elem) <|> pure Nothing
     case el of
       Just el' -> liftA2 (++) (pure el')
                     (parseRepetition (Repetition (Repeat 0 (Just (n-1))) elem))
       Nothing -> pure []
+-- Between n and m times
+parseRepetition (Repetition (Repeat n (Just m)) elem) =
+    liftA2 (++) (parseElem elem)
+                (parseRepetition (Repetition (Repeat (n-1) (Just (m-1))) elem))
 -- At least n times
 parseRepetition (Repetition (Repeat n x) elem) =
     liftA2 (++) (parseElem elem)
@@ -66,12 +69,15 @@ parseElem (OptionElement (Group spec)) = parseSumSpec spec <|> pure [] <?> "Opti
 parseElem (LiteralElement lit) = parseLiteral lit <?> "Literal element"
 
 parseLiteral :: Literal -> Parser [Content]
-parseLiteral (CharLit lit) = toList . Terminal . Text.pack <$> try (string' (Text.unpack lit)) <?> "String literal"
+parseLiteral (CharLit lit) = trace (Text.unpack lit) (toList . Terminal <$> asciiCI lit <?> "String literal")
 parseLiteral (NumLit lit) = toList . Terminal <$> parseNumLit lit
 
 parseNumLit :: NumLit -> Parser Text.Text
-parseNumLit (IntLit ints) = Text.pack <$> try (sequence (char . chr <$> ints)) <?> "Int-defined character"
-parseNumLit (RangeLit x1 x2) = Text.pack . toList <$> try (oneOf $ chr <$> [x1..x2]) <?> "Range literal"
+parseNumLit (IntLit ints) = (Text.pack <$> (sequence (char . chr <$> ints)) <?> "Int-defined character")
+parseNumLit (RangeLit x1 x2) = Text.pack . toList <$> (oneOf $ chr <$> [x1..x2]) <?> "Range literal"
 
 toList :: a -> [a]
 toList = pure
+
+oneOf :: String -> Parser Char
+oneOf = foldr (<|>) mzero . fmap char
