@@ -64,4 +64,11 @@ inlineRulesElement :: RuleMap -> Element -> Element
 inlineRulesElement rulemap oldrule@(RuleElement' ruleName) =
     let rule = Map.lookup ruleName rulemap
     in  maybe oldrule (RuleElement . inlineRulesRule rulemap) rule
-inlineRulesElement _ elem = elem
+inlineRulesElement rulemap (GroupElement grp) =
+    GroupElement $ inlineRulesGroup rulemap grp
+inlineRulesElement rulemap (OptionElement grp) =
+    OptionElement $ inlineRulesGroup rulemap grp
+inlineRulesElement _ old = old
+
+inlineRulesGroup :: RuleMap -> Group -> Group
+inlineRulesGroup rulemap (Group sumspec) = Group (inlineRulesSumSpec rulemap sumspec)
