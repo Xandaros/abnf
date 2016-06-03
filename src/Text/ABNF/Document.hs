@@ -7,6 +7,9 @@ License     : BSD2
 Maintainer  : Martin Zeller <mz.bremerhaven@gmail.com>
 Stability   : experimental
 Portability : non-portable
+
+This module takes a canonicalized rule to parse a document described by it.
+You use the function 'generateParser' to generate an attoparsec parser.
 -}
 
 module Text.ABNF.Document where

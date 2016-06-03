@@ -9,6 +9,8 @@ Portability : portable
 
 This module provides facilities to parse ABNF documents.
 To parse documents using ABNF, see "Text.ABNF.Document.Parser"
+
+The parser you will most likely be interested in is 'rulelist'
 -}
 module Text.ABNF.Parser where
 
