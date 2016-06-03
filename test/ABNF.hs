@@ -10,11 +10,12 @@ import qualified Data.Text as T
 
 import Text.ABNF.Parser
 import Text.ABNF.Parser.Types
+import Util
 
 testParser :: (Eq a, Show a) => Parser a -> T.Text -> a -> Assertion
 testParser parser input expected = case parse parser "" input of
                                      Left msg -> assertFailure (show msg)
-                                     Right a -> assertEqual "" a expected
+                                     Right a -> assertEqual "" expected a
 
 abnfTests :: TestTree
 abnfTests = testGroup "ABNF Parser"
@@ -81,15 +82,3 @@ abnfTests = testGroup "ABNF Parser"
                 (Rule "a" Adds (simpleSum wsElement))
           ]
     ]
-
-simpleSum :: Element -> SumSpec
-simpleSum = SumSpec . (:[]) . simpleProd
-
-simpleProd :: Element -> ProductSpec
-simpleProd = ProductSpec . (:[]) . single
-
-single :: Element -> Repetition
-single = Repetition (Repeat 1 (Just 1))
-
-wsElement :: Element
-wsElement = LiteralElement (NumLit (IntLit [0x20]))

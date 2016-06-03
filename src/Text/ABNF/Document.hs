@@ -9,7 +9,7 @@ Stability   : experimental
 Portability : non-portable
 -}
 
-module Text.ABNF.Document (generateParser) where
+module Text.ABNF.Document where
 
 import Control.Applicative (liftA2, (<|>), many)
 import Control.Monad (join, mzero)

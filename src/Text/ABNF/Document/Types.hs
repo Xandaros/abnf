@@ -14,8 +14,8 @@ import qualified Data.Text as Text
 type Identifier = Text.Text
 
 data Document = Document Identifier [Content]
-    deriving (Show)
+    deriving (Show, Eq)
 
 data Content = Terminal Text.Text
              | NonTerminal Document
-             deriving (Show)
+             deriving (Show, Eq)

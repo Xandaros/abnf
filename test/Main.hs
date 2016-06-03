@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE BinaryLiterals #-}
 {-|
 Module      : Main
 Description : Testsuite
@@ -15,10 +13,11 @@ module Main where
 import Test.Tasty
 
 import ABNF (abnfTests)
-
+import Document (documentTests)
 
 main :: IO ()
 main = defaultMain tests
 
 tests :: TestTree
-tests = testGroup "tests" $ [abnfTests]
+tests = testGroup "tests" $ [abnfTests, documentTests]
+
