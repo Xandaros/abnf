@@ -17,36 +17,36 @@ import qualified Data.Text as Text
 type Identifier = Text.Text
 
 data Rule = Rule Identifier DefinedAs SumSpec
-    deriving (Show)
+    deriving (Show, Eq)
 
 data SumSpec = SumSpec [ProductSpec]
-    deriving (Show)
+    deriving (Show, Eq)
 
 data ProductSpec = ProductSpec [Repetition]
-    deriving (Show)
+    deriving (Show, Eq)
 
 data Repetition = Repetition Repeat Element
-    deriving (Show)
+    deriving (Show, Eq)
 
 data Repeat = Repeat Int (Maybe Int)
-    deriving (Show)
+    deriving (Show, Eq)
 
 data Element = RuleElement' Identifier
              | RuleElement Rule
              | GroupElement Group
              | OptionElement Group
              | LiteralElement Literal
-    deriving (Show)
+             deriving (Show, Eq)
 
 data Group = Group SumSpec
-    deriving (Show)
+    deriving (Show, Eq)
 
 data Literal = CharLit Text.Text | NumLit NumLit
-    deriving (Show)
+    deriving (Show, Eq)
 
 data NumLit = IntLit [Int]
             | RangeLit Int Int
-    deriving (Show)
+            deriving (Show, Eq)
 
 data DefinedAs = Equals | Adds
-    deriving (Show)
+    deriving (Show, Eq)

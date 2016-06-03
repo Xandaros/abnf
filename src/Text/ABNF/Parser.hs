@@ -14,14 +14,11 @@ module Text.ABNF.Parser where
 
 import Prelude hiding (repeat)
 
-import Control.Monad (void)
-
 import Data.Char (ord, isHexDigit, digitToInt)
 import Data.Maybe (catMaybes)
 import qualified Data.Text as Text
 import Numeric (readInt)
 import Text.Megaparsec
-import Text.Megaparsec.Char
 import Text.Megaparsec.Text
 
 import Text.ABNF.Parser.Types
