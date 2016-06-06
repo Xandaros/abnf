@@ -44,7 +44,8 @@ test-suite test
   type:                exitcode-stdio-1.0
   main-is:             Main.hs
   other-modules:       ABNF,
-                       Document
+                       Document,
+                       Util
   hs-source-dirs:      test
   build-depends:       base >= 4.8 && <4.9,
                        text,
