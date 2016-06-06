@@ -1,12 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Text.ABNF.Canonicalizer (canonicalizeRules) where
+{-|
+Module      : Text.ABNF.ABNF.Canonicalizer
+Description : Canonicalize a list of rules
+Copyright   : (c) Martin Zeller, 2016
+License     : BSD2
+Maintainer  : Martin Zeller <mz.bremerhaven@gmail.com>
+Stability   : experimental
+Portability : non-portable
+-}
+
+module Text.ABNF.ABNF.Canonicalizer (canonicalizeRules) where
 
 import Data.List (partition)
 import Data.Monoid ((<>))
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
 
-import Text.ABNF.Parser.Types
+import Text.ABNF.ABNF.Types
 
 type RuleMap = Map.Map Identifier Rule
 

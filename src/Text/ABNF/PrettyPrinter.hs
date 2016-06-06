@@ -1,5 +1,5 @@
 {-|
-Module      : Text.ABNF.PrettyPrinter
+Module      : Text.ABNF.ABNF.PrettyPrinter
 Description : Pretty printer for ABNF rules
 Copyright   : (c) Martin Zeller, 2016
 License     : BSD2
@@ -13,7 +13,7 @@ module Text.ABNF.PrettyPrinter where
 import Data.List (intersperse)
 import qualified Data.Text as Text
 
-import Text.ABNF.Parser.Types
+import Text.ABNF.ABNF.Types
 
 class Pretty a where
     prettyShow :: a -> String

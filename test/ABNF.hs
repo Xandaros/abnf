@@ -8,8 +8,8 @@ import Text.Megaparsec
 import Text.Megaparsec.Text
 import qualified Data.Text as T
 
-import Text.ABNF.Parser
-import Text.ABNF.Parser.Types
+import Text.ABNF.ABNF.Parser
+import Text.ABNF.ABNF.Types
 import Util
 
 testParser :: (Eq a, Show a) => Parser a -> T.Text -> a -> Assertion

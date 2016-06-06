@@ -1,5 +1,5 @@
 {-|
-Module      : Text.ABNF.Parser
+Module      : Text.ABNF.ABNF.Parser
 Description : ABNF Parser
 Copyright   : (c) Martin Zeller, 2016
 License     : BSD2
@@ -12,7 +12,7 @@ To parse documents using ABNF, see "Text.ABNF.Document.Parser"
 
 The parser you will most likely be interested in is 'rulelist'
 -}
-module Text.ABNF.Parser where
+module Text.ABNF.ABNF.Parser where
 
 import Prelude hiding (repeat)
 
@@ -23,7 +23,7 @@ import Numeric (readInt)
 import Text.Megaparsec
 import Text.Megaparsec.Text
 
-import Text.ABNF.Parser.Types
+import Text.ABNF.ABNF.Types
 
 identifier :: Parser Identifier
 identifier = Text.pack <$> do

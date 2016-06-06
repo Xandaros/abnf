@@ -1,5 +1,5 @@
 {-|
-Module      : Text.ABNF.Parser.Types
+Module      : Text.ABNF.ABNF.Types
 Description : Types used by the parser
 Copyright   : (c) Martin Zeller, 2016
 License     : BSD2
@@ -10,7 +10,7 @@ Portability : portable
 These types are used by the parser and are loosely modeled after the ABNF
 privded in <https://tools.ietf.org/html/rfc5234#section-4 RFC 5234>
 -}
-module Text.ABNF.Parser.Types where
+module Text.ABNF.ABNF.Types where
 
 import qualified Data.Text as Text
 

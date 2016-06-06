@@ -1,6 +1,6 @@
 module Util where
 
-import Text.ABNF.Parser.Types
+import Text.ABNF.ABNF.Types
 
 simpleSum :: Element -> SumSpec
 simpleSum = SumSpec . (:[]) . simpleProd

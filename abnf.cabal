@@ -2,7 +2,7 @@
 -- see http://haskell.org/cabal/users-guide/
 
 name:                abnf
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Parse ABNF and generate parsers for the specified document
 description:         You can use this library to parse an ABNF document and
                      generate a parser from that ABNF to read a document
@@ -23,10 +23,12 @@ source-repository head
   location:            https://github.com/Xandaros/abnf.git
 
 library
-  exposed-modules:     Text.ABNF.Parser,
-                       Text.ABNF.Parser.Types,
-                       Text.ABNF.Canonicalizer,
+  exposed-modules:     Text.ABNF.ABNF,
+                       Text.ABNF.ABNF.Parser,
+                       Text.ABNF.ABNF.Types,
+                       Text.ABNF.ABNF.Canonicalizer,
                        Text.ABNF.Document,
+                       Text.ABNF.Document.Parser,
                        Text.ABNF.Document.Types,
                        Text.ABNF.PrettyPrinter
   ghc-options:         -W

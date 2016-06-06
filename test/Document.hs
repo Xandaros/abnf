@@ -6,8 +6,8 @@ import Data.Attoparsec.Text
 import Test.Tasty
 import Test.Tasty.HUnit
 
-import Text.ABNF.Parser.Types
-import Text.ABNF.Document
+import Text.ABNF.ABNF.Types
+import Text.ABNF.Document.Parser
 import Text.ABNF.Document.Types
 
 import Util
