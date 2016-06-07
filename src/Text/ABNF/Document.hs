@@ -1,3 +1,13 @@
+{-|
+Module      : Text.ABNF.Document
+Description : 
+Copyright   : (c) Martin Zeller, 2016
+License     : BSD2
+Maintainer  : Martin Zeller <mz.bremerhaven@gmail.com>
+Stability   : experimental
+Portability : non-portable
+-}
+
 module Text.ABNF.Document
     (
     -- * Document types
