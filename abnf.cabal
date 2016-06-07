@@ -23,7 +23,8 @@ source-repository head
   location:            https://github.com/Xandaros/abnf.git
 
 library
-  exposed-modules:     Text.ABNF.ABNF,
+  exposed-modules:     Text.ABNF,
+                       Text.ABNF.ABNF,
                        Text.ABNF.ABNF.Parser,
                        Text.ABNF.ABNF.Types,
                        Text.ABNF.ABNF.Canonicalizer,
