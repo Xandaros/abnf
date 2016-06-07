@@ -30,6 +30,7 @@ library
                        Text.ABNF.Document,
                        Text.ABNF.Document.Parser,
                        Text.ABNF.Document.Types,
+                       Text.ABNF.Document.Operations,
                        Text.ABNF.PrettyPrinter
   ghc-options:         -W
   -- other-modules:       

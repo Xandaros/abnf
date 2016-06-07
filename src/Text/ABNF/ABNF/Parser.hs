@@ -31,6 +31,9 @@ identifier = Text.pack <$> do
     otherChars <- many $ alphaNumChar <|> char '-'
     pure (firstChar:otherChars)
 
+parseABNF :: String -> Text.Text -> Either (ParseError Char Dec) [Rule]
+parseABNF = parse rulelist
+
 rulelist :: Parser [Rule]
 rulelist = catMaybes <$> (some $ Just <$> rule <|> (many wsp *> c_nl *> pure Nothing))
 

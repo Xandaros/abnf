@@ -13,9 +13,23 @@ import qualified Data.Text as Text
 
 type Identifier = Text.Text
 
-data Document = Document Identifier [Content]
+data Document a = Document Identifier [Content a]
     deriving (Show, Eq)
 
-data Content = Terminal Text.Text
-             | NonTerminal Document
+data Content a = Terminal a
+               | NonTerminal (Document a)
              deriving (Show, Eq)
+
+instance Functor Document where
+    fmap f (Document ident conts) = Document ident $ fmap (fmap f) conts
+
+instance Functor Content where
+    fmap f (Terminal a) = Terminal $ f a
+    fmap f (NonTerminal doc) = NonTerminal $ fmap f doc
+
+instance Applicative Content
+
+instance Monad Content where
+    return = Terminal
+    Terminal a >>= f = f a
+    NonTerminal (Document ident cs) >>= f =  NonTerminal (Document ident (map (>>= f) cs))

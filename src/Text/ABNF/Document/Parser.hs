@@ -20,26 +20,30 @@ import Data.Char (chr)
 import Data.Foldable (asum)
 import Data.Monoid ((<>))
 
-import qualified Data.Text as Text
+import qualified Data.Text as T
 import Data.Attoparsec.Text
 
 import Text.ABNF.ABNF.Types
 import Text.ABNF.Document.Types
 
-generateParser :: Rule -> Parser Document
+-- | Convenience function to directly parse a 'Document'
+parseDocument :: Rule -> T.Text -> Either String (Document T.Text)
+parseDocument = parseOnly . generateParser
+
+generateParser :: Rule -> Parser (Document T.Text)
 generateParser = parseRule
 
-parseRule :: Rule -> Parser Document
+parseRule :: Rule -> Parser (Document T.Text)
 parseRule (Rule ident _ spec) = Document ident <$> parseSumSpec spec <?> "Rule"
 
-parseSumSpec :: SumSpec -> Parser [Content]
+parseSumSpec :: SumSpec -> Parser [Content T.Text]
 parseSumSpec (SumSpec prodspecs) = asum (map parseProdSpec prodspecs) <?> "Sum"
 
-parseProdSpec :: ProductSpec -> Parser [Content]
+parseProdSpec :: ProductSpec -> Parser [Content T.Text]
 parseProdSpec (ProductSpec reps) =
     join <$> (sequence $ map parseRepetition reps) <?> "Product"
 
-parseRepetition :: Repetition -> Parser [Content]
+parseRepetition :: Repetition -> Parser [Content T.Text]
 -- any number of times
 parseRepetition (Repetition (Repeat 0 Nothing) elem) =
     join <$> (many $ parseElem elem)
@@ -61,20 +65,20 @@ parseRepetition (Repetition (Repeat n x) elem) =
     liftA2 (++) (parseElem elem)
                 (parseRepetition (Repetition (Repeat (n-1) x) elem))
 
-parseElem :: Element -> Parser [Content]
+parseElem :: Element -> Parser [Content T.Text]
 parseElem (RuleElement rule) = toList . NonTerminal <$> parseRule rule <?> "Rule element"
-parseElem (RuleElement' ruleName) = fail . Text.unpack $ "Unknown rule: " <> ruleName
+parseElem (RuleElement' ruleName) = fail . T.unpack $ "Unknown rule: " <> ruleName
 parseElem (GroupElement (Group spec)) = parseSumSpec spec <?> "Group element"
 parseElem (OptionElement (Group spec)) = parseSumSpec spec <|> pure [] <?> "Optional element"
 parseElem (LiteralElement lit) = parseLiteral lit <?> "Literal element"
 
-parseLiteral :: Literal -> Parser [Content]
+parseLiteral :: Literal -> Parser [Content T.Text]
 parseLiteral (CharLit lit) = toList . Terminal <$> asciiCI lit <?> "String literal"
 parseLiteral (NumLit lit) = toList . Terminal <$> parseNumLit lit
 
-parseNumLit :: NumLit -> Parser Text.Text
-parseNumLit (IntLit ints) = (Text.pack <$> (sequence (char . chr <$> ints)) <?> "Int-defined character")
-parseNumLit (RangeLit x1 x2) = Text.pack . toList <$> (oneOf $ chr <$> [x1..x2]) <?> "Range literal"
+parseNumLit :: NumLit -> Parser T.Text
+parseNumLit (IntLit ints) = (T.pack <$> (sequence (char . chr <$> ints)) <?> "Int-defined character")
+parseNumLit (RangeLit x1 x2) = T.pack . toList <$> (oneOf $ chr <$> [x1..x2]) <?> "Range literal"
 
 toList :: a -> [a]
 toList = pure
