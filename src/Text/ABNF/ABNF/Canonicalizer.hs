@@ -18,10 +18,10 @@ import qualified Data.Text as Text
 
 import Text.ABNF.ABNF.Types
 
-type RuleMap = Map.Map Identifier Rule
+type RuleMap = Map.Map Text.Text Rule
 
 -- | Canonicalize a list of 'Rule's, leaving only a single 'Rule'.
-canonicalizeRules :: Identifier -- ^ The main, or top-level, 'Rule'
+canonicalizeRules :: Text.Text  -- ^ The main, or top-level, 'Rule'
                   -> [Rule]     -- ^ List of 'Rule's to canonicalize
                   -> Maybe Rule -- ^ The operation may fail for a number of
                                 -- reasons, for example, because the main 'Rule'

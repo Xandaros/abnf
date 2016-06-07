@@ -2,8 +2,7 @@ module Text.ABNF.Document
     (
     -- * Document types
     -- | Re-exported from "Text.ABNF.Document.Types"
-      Identifier
-    , Document(..)
+      Document(..)
     , Content(..)
     -- * Reducing documents
     -- | Re-exported from "Text.ABNF.Document.Operations"
@@ -24,8 +23,7 @@ module Text.ABNF.Document
     , parseDocument
     ) where
 
-import Text.ABNF.Document.Types ( Identifier
-                                , Document(..)
+import Text.ABNF.Document.Types ( Document(..)
                                 , Content(..)
                                 )
 

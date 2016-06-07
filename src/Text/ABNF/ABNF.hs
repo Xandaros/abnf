@@ -2,8 +2,7 @@ module Text.ABNF.ABNF
     (
     -- * ABNF types
     -- | Re-exported from "Text.ABNF.ABNF.Types"
-      Identifier
-    , Rule(..)
+      Rule(..)
     -- * Parsing ABNF Rules
     -- | Re-exported from "Text.ABNF.ABNF.Parser"
     , rulelist
@@ -13,6 +12,6 @@ module Text.ABNF.ABNF
     , canonicalizeRules
     ) where
 
-import Text.ABNF.ABNF.Types (Identifier, Rule(..))
+import Text.ABNF.ABNF.Types (Rule(..))
 import Text.ABNF.ABNF.Parser (rulelist, parseABNF)
 import Text.ABNF.ABNF.Canonicalizer (canonicalizeRules)

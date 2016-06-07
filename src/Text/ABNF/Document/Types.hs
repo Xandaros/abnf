@@ -11,15 +11,13 @@ module Text.ABNF.Document.Types where
 
 import qualified Data.Text as Text
 
-type Identifier = Text.Text
-
 -- | A 'Document' represents a tree of the parsed input. Directly after parsing,
 -- every 'Rule' that was applied, gets a node in the tree.
 --
 -- You can use 'Text.ABNF.Document.filterDocument' and
 -- 'Text.ABNF.Document.squashDocumentOn' to reduce the tree into a more
 -- managable shape.
-data Document a = Document Identifier [Content a]
+data Document a = Document Text.Text [Content a]
     deriving (Show, Eq)
 
 data Content a = Terminal a

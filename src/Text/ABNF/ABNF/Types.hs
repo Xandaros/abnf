@@ -14,15 +14,13 @@ module Text.ABNF.ABNF.Types where
 
 import qualified Data.Text as Text
 
-type Identifier = Text.Text
-
 -- | A 'Rule' represents a single entry in your ABNF. It could, for example,
 -- look like this:
 --
 -- @
 -- CRLF = %x0D.0A
 -- @
-data Rule = Rule Identifier DefinedAs SumSpec
+data Rule = Rule Text.Text DefinedAs SumSpec
     deriving (Show, Eq)
 
 data SumSpec = SumSpec [ProductSpec]
@@ -37,7 +35,7 @@ data Repetition = Repetition Repeat Element
 data Repeat = Repeat Int (Maybe Int)
     deriving (Show, Eq)
 
-data Element = RuleElement' Identifier
+data Element = RuleElement' Text.Text
              | RuleElement Rule
              | GroupElement Group
              | OptionElement Group

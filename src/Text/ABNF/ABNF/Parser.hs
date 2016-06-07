@@ -25,7 +25,7 @@ import Text.Megaparsec.Text
 
 import Text.ABNF.ABNF.Types
 
-identifier :: Parser Identifier
+identifier :: Parser Text.Text
 identifier = Text.pack <$> do
     firstChar <- letterChar
     otherChars <- many $ alphaNumChar <|> char '-'
