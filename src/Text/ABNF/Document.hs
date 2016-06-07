@@ -1,6 +1,6 @@
 {-|
 Module      : Text.ABNF.Document
-Description : 
+Description : Documents according to an ABNF definition
 Copyright   : (c) Martin Zeller, 2016
 License     : BSD2
 Maintainer  : Martin Zeller <mz.bremerhaven@gmail.com>
