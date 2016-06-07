@@ -16,7 +16,13 @@ import Data.Monoid ((<>))
 
 import Text.ABNF.Document.Types
 
-filterDocument :: forall a. (Document a -> Bool) -> Document a -> Maybe (Document a)
+-- | Filter documents according to some predicate.
+-- Similar to 'filter' in the Prelude.
+filterDocument :: forall a. (Document a -> Bool) -- ^ Predicate to check
+               -> Document a                     -- ^ Document to filter
+               -> Maybe (Document a)             -- ^ Returns 'Nothing' if the
+                                                 --   predicate fails, cascades
+                                                 --   otherwise
 filterDocument pred doc@(Document ident conts) | pred doc = Just . Document ident $ (catMaybes . fmap filterNT $ conts)
                                                | otherwise = Nothing
     where
@@ -25,9 +31,12 @@ filterDocument pred doc@(Document ident conts) | pred doc = Just . Document iden
         filterNT (NonTerminal doc) | pred doc = NonTerminal <$> filterDocument pred doc
                                    | otherwise = Nothing
 
+-- | Squash all contents of a 'Document' into a single 'Terminal'
 squashDocument :: Monoid a => Document a -> Document a
 squashDocument (Document ident conts) = Document ident [Terminal $ squashContent conts]
 
+-- | Squash all contents of a 'Document' which matches the predicate
+-- See also 'squashDocument'
 squashDocumentOn :: forall a. Monoid a => (Document a -> Bool) -> Document a -> Document a
 squashDocumentOn pred doc@(Document ident conts) | pred doc = squashDocument doc
                                                  | otherwise = Document ident (squashNT <$> conts)
@@ -36,6 +45,8 @@ squashDocumentOn pred doc@(Document ident conts) | pred doc = squashDocument doc
         squashNT (Terminal a) = Terminal a
         squashNT (NonTerminal doc) = NonTerminal $ squashDocumentOn pred doc
 
+-- | Squash all contents using the 'Monoid' instance of @a@, cascading into
+-- 'NonTerminal's.
 squashContent :: Monoid a => [Content a] -> a
 squashContent [] = mempty
 squashContent ((Terminal a):xs) = a <> squashContent xs

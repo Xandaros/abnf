@@ -27,9 +27,19 @@ import Text.ABNF.ABNF.Types
 import Text.ABNF.Document.Types
 
 -- | Convenience function to directly parse a 'Document'
-parseDocument :: Rule -> T.Text -> Either String (Document T.Text)
+parseDocument :: Rule                            -- ^ 'Rule' to parse against
+              -> T.Text                          -- ^ 'Text' to parse
+              -> Either String (Document T.Text) -- ^ Return a 'String'
+                                                 -- describing the error or the
+                                                 -- successfully parsed
+                                                 -- 'Document'.
+                                                 --
+                                                 -- The format of the 'String'
+                                                 -- is as returned by
+                                                 -- <https://hackage.haskell.org/package/attoparsec attoparsec>.
 parseDocument = parseOnly . generateParser
 
+-- | Generate an <https://hackage.haskell.org/package/attoparsec attoparsec> parser
 generateParser :: Rule -> Parser (Document T.Text)
 generateParser = parseRule
 

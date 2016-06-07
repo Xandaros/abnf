@@ -16,6 +16,12 @@ import qualified Data.Text as Text
 
 type Identifier = Text.Text
 
+-- | A 'Rule' represents a single entry in your ABNF. It could, for example,
+-- look like this:
+--
+-- @
+-- CRLF = %x0D.0A
+-- @
 data Rule = Rule Identifier DefinedAs SumSpec
     deriving (Show, Eq)
 

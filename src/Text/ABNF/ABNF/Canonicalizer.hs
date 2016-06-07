@@ -20,7 +20,12 @@ import Text.ABNF.ABNF.Types
 
 type RuleMap = Map.Map Identifier Rule
 
-canonicalizeRules :: Identifier -> [Rule] -> Maybe Rule
+-- | Canonicalize a list of 'Rule's, leaving only a single 'Rule'.
+canonicalizeRules :: Identifier -- ^ The main, or top-level, 'Rule'
+                  -> [Rule]     -- ^ List of 'Rule's to canonicalize
+                  -> Maybe Rule -- ^ The operation may fail for a number of
+                                -- reasons, for example, because the main 'Rule'
+                                -- does not exist
 canonicalizeRules mainRuleIdent rules = do
     let (defs, adds) = partition isAdd rules
         ruleMap  = foldr (\rule@(Rule ident _ _) curMap ->

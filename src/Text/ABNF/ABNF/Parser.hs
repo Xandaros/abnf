@@ -31,9 +31,16 @@ identifier = Text.pack <$> do
     otherChars <- many $ alphaNumChar <|> char '-'
     pure (firstChar:otherChars)
 
+-- | Convencience function to directly parse a list of rules.
+-- This is equivalent to
+--
+-- @
+-- 'parse' 'rulelist'
+-- @
 parseABNF :: String -> Text.Text -> Either (ParseError Char Dec) [Rule]
 parseABNF = parse rulelist
 
+-- | The main parser, which parses a list of 'Rule's.
 rulelist :: Parser [Rule]
 rulelist = catMaybes <$> (some $ Just <$> rule <|> (many wsp *> c_nl *> pure Nothing))
 
