@@ -11,7 +11,7 @@ Portability : ScopedTypeVariables
 
 module Text.ABNF.Document.Operations where
 
-import Control.Applicative ((<|>))
+import Control.Monad (join)
 import Data.Maybe (catMaybes)
 import Data.Monoid ((<>))
 import qualified Data.Text as Text
@@ -54,12 +54,15 @@ squashContent [] = mempty
 squashContent ((Terminal a):xs) = a <> squashContent xs
 squashContent ((NonTerminal (Document _ conts)):xs) = squashContent conts <> squashContent xs
 
-lookupDocument :: forall a. Text.Text -> Document a -> Maybe (Document a)
-lookupDocument ident doc@(Document ident2 conts) | ident2 == ident = Just doc
-                                                 | otherwise = lookupNT conts
+-- | Looks up nested 'Document's with a particular identifier.
+-- NB: Will not recurse into matching documents.
+lookupDocument :: forall a. Text.Text -- ^ Identifier to search for
+               -> Document a          -- ^ 'Document' to search in
+               -> [Document a]
+lookupDocument ident doc@(Document ident2 conts) | ident2 == ident = [doc]
+                                                 | otherwise = join $ lookupNT <$> conts
     where
-        lookupNT :: [Content a] -> Maybe (Document a)
-        lookupNT [] = Nothing
-        lookupNT ((Terminal _):xs) = lookupNT xs
-        lookupNT ((NonTerminal d):xs) = lookupDocument ident d <|> lookupNT xs
+        lookupNT :: Content a -> [Document a]
+        lookupNT (Terminal _) = []
+        lookupNT (NonTerminal d) = lookupDocument ident d
 
