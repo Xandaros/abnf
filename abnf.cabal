@@ -2,7 +2,7 @@
 -- see http://haskell.org/cabal/users-guide/
 
 name:                abnf
-version:             0.4.0.0
+version:             0.4.1.0
 synopsis:            Parse ABNF and generate parsers for the specified document
 description:         You can use this library to parse an ABNF document and
                      generate a parser from that ABNF to read a document
