@@ -65,7 +65,8 @@ lookupDocument' :: forall a. Text.Text -- ^ Identifier to search for
                 -> Document a          -- ^ 'Document' to search in
                 -> [Document a]
 lookupDocument' _ (Terminal _) = []
-lookupDocument' ident doc@(Document _ conts) = catMaybes $ go ident <$> conts
+lookupDocument' ident (Document _ conts) = catMaybes $ go ident <$> conts
     where
+        go _     (Terminal _) = Nothing
         go ident doc@(Document ident2 _) | ident == ident2 = Just doc
                                          | otherwise = Nothing
