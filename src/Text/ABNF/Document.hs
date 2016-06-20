@@ -26,6 +26,7 @@ module Text.ABNF.Document
     , squashDocument
     , squashDocumentOn
     , lookupDocument
+    , lookupDocument'
     , getContent
     -- * Parsing documents
     -- | Re-exported from "Text.ABNF.Document.Parser"
@@ -41,6 +42,7 @@ import Text.ABNF.Document.Operations ( filterDocument
                                      , squashDocumentOn
                                      , getContent
                                      , lookupDocument
+                                     , lookupDocument'
                                      )
 
 import Text.ABNF.Document.Parser ( generateParser

@@ -57,3 +57,15 @@ lookupDocument _ (Terminal _) = []
 lookupDocument ident doc@(Document ident2 conts)
     | ident2 == ident = [doc]
     | otherwise       = join $ lookupDocument ident <$> conts
+
+-- | Similar to 'lookupDocument', 'lookupDocument'' will find a 'Document' with
+-- a particular identifier. This, however, will only find immediate children and
+-- will not recurse.
+lookupDocument' :: forall a. Text.Text -- ^ Identifier to search for
+                -> Document a          -- ^ 'Document' to search in
+                -> [Document a]
+lookupDocument' _ (Terminal _) = []
+lookupDocument' ident doc@(Document _ conts) = catMaybes $ go ident <$> conts
+    where
+        go ident doc@(Document ident2 _) | ident == ident2 = Just doc
+                                         | otherwise = Nothing
