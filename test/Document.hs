@@ -38,7 +38,7 @@ documentTests = testGroup "Document Parser" $
       in  testGroup "element" $
           [ testCase "RuleElement" $
               testElem (RuleElement $ simpleRule "x" wsElement) " "
-                [NonTerminal (Document "x" [Terminal " "])]
+                [Document "x" [Terminal " "]]
           , testCase "GroupElement" $
               testElem (GroupElement (Group (simpleSum wsElement))) " "
                 [Terminal " "]

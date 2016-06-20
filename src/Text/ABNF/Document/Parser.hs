@@ -46,14 +46,14 @@ generateParser = parseRule
 parseRule :: Rule -> Parser (Document T.Text)
 parseRule (Rule ident _ spec) = Document ident <$> parseSumSpec spec <?> "Rule"
 
-parseSumSpec :: SumSpec -> Parser [Content T.Text]
+parseSumSpec :: SumSpec -> Parser [Document T.Text]
 parseSumSpec (SumSpec prodspecs) = asum (map parseProdSpec prodspecs) <?> "Sum"
 
-parseProdSpec :: ProductSpec -> Parser [Content T.Text]
+parseProdSpec :: ProductSpec -> Parser [Document T.Text]
 parseProdSpec (ProductSpec reps) =
     join <$> (sequence $ map parseRepetition reps) <?> "Product"
 
-parseRepetition :: Repetition -> Parser [Content T.Text]
+parseRepetition :: Repetition -> Parser [Document T.Text]
 -- any number of times
 parseRepetition (Repetition (Repeat 0 Nothing) elem) =
     join <$> (many $ parseElem elem)
@@ -75,14 +75,14 @@ parseRepetition (Repetition (Repeat n x) elem) =
     liftA2 (++) (parseElem elem)
                 (parseRepetition (Repetition (Repeat (n-1) x) elem))
 
-parseElem :: Element -> Parser [Content T.Text]
-parseElem (RuleElement rule) = toList . NonTerminal <$> parseRule rule <?> "Rule element"
+parseElem :: Element -> Parser [Document T.Text]
+parseElem (RuleElement rule) = toList <$> parseRule rule <?> "Rule element"
 parseElem (RuleElement' ruleName) = fail . T.unpack $ "Unknown rule: " <> ruleName
 parseElem (GroupElement (Group spec)) = parseSumSpec spec <?> "Group element"
 parseElem (OptionElement (Group spec)) = parseSumSpec spec <|> pure [] <?> "Optional element"
 parseElem (LiteralElement lit) = parseLiteral lit <?> "Literal element"
 
-parseLiteral :: Literal -> Parser [Content T.Text]
+parseLiteral :: Literal -> Parser [Document T.Text]
 parseLiteral (CharLit lit) = toList . Terminal <$> asciiCI lit <?> "String literal"
 parseLiteral (NumLit lit) = toList . Terminal <$> parseNumLit lit
 

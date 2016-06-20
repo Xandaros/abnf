@@ -13,7 +13,6 @@ module Text.ABNF.Document.Operations where
 
 import Control.Monad (join)
 import Data.Maybe (catMaybes)
-import Data.Monoid ((<>))
 import qualified Data.Text as Text
 
 import Text.ABNF.Document.Types
@@ -25,44 +24,36 @@ filterDocument :: forall a. (Document a -> Bool) -- ^ Predicate to check
                -> Maybe (Document a)             -- ^ Returns 'Nothing' if the
                                                  --   predicate fails, cascades
                                                  --   otherwise
-filterDocument pred doc@(Document ident conts) | pred doc = Just . Document ident $ (catMaybes . fmap filterNT $ conts)
-                                               | otherwise = Nothing
-    where
-        filterNT :: Content a -> Maybe (Content a)
-        filterNT a@(Terminal _) = Just a
-        filterNT (NonTerminal doc) | pred doc = NonTerminal <$> filterDocument pred doc
-                                   | otherwise = Nothing
+filterDocument pred term@(Terminal _) | pred term = Just term
+                                      | otherwise = Nothing
+
+filterDocument pred doc@(Document ident conts)
+    | pred doc = Just . Document ident $ (catMaybes . fmap (filterDocument pred) $ conts)
+    | otherwise = Nothing
 
 -- | Squash all contents of a 'Document' into a single 'Terminal'
 squashDocument :: Monoid a => Document a -> Document a
-squashDocument (Document ident conts) = Document ident [Terminal $ squashContent conts]
+squashDocument term@(Terminal _) = term
+squashDocument doc@(Document ident _) = Document ident [Terminal $ getContent doc]
+
+getContent :: Monoid a => Document a -> a
+getContent (Terminal a) = a
+getContent (Document _ conts) = mconcat (fmap getContent conts)
 
 -- | Squash all contents of a 'Document' which matches the predicate
 -- See also 'squashDocument'
 squashDocumentOn :: forall a. Monoid a => (Document a -> Bool) -> Document a -> Document a
-squashDocumentOn pred doc@(Document ident conts) | pred doc = squashDocument doc
-                                                 | otherwise = Document ident (squashNT <$> conts)
-    where
-        squashNT :: Content a -> Content a
-        squashNT (Terminal a) = Terminal a
-        squashNT (NonTerminal doc) = NonTerminal $ squashDocumentOn pred doc
-
--- | Squash all contents using the 'Monoid' instance of @a@, cascading into
--- 'NonTerminal's.
-squashContent :: Monoid a => [Content a] -> a
-squashContent [] = mempty
-squashContent ((Terminal a):xs) = a <> squashContent xs
-squashContent ((NonTerminal (Document _ conts)):xs) = squashContent conts <> squashContent xs
+squashDocumentOn pred doc@(Document ident conts)
+    | pred doc = squashDocument doc
+    | otherwise = Document ident (squashDocumentOn pred <$> conts)
+squashDocumentOn _ term@(Terminal _) = term
 
 -- | Looks up nested 'Document's with a particular identifier.
 -- NB: Will not recurse into matching documents.
 lookupDocument :: forall a. Text.Text -- ^ Identifier to search for
                -> Document a          -- ^ 'Document' to search in
                -> [Document a]
-lookupDocument ident doc@(Document ident2 conts) | ident2 == ident = [doc]
-                                                 | otherwise = join $ lookupNT <$> conts
-    where
-        lookupNT :: Content a -> [Document a]
-        lookupNT (Terminal _) = []
-        lookupNT (NonTerminal d) = lookupDocument ident d
-
+lookupDocument _ (Terminal _) = []
+lookupDocument ident doc@(Document ident2 conts)
+    | ident2 == ident = [doc]
+    | otherwise       = join $ lookupDocument ident <$> conts

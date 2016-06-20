@@ -17,23 +17,10 @@ import qualified Data.Text as Text
 -- You can use 'Text.ABNF.Document.filterDocument' and
 -- 'Text.ABNF.Document.squashDocumentOn' to reduce the tree into a more
 -- managable shape.
-data Document a = Document Text.Text [Content a]
-    deriving (Show, Eq)
-
-data Content a = Terminal a
-               | NonTerminal (Document a)
-             deriving (Show, Eq)
+data Document a = Document Text.Text [Document a]
+                | Terminal a
+                deriving (Show, Eq)
 
 instance Functor Document where
     fmap f (Document ident conts) = Document ident $ fmap (fmap f) conts
-
-instance Functor Content where
     fmap f (Terminal a) = Terminal $ f a
-    fmap f (NonTerminal doc) = NonTerminal $ fmap f doc
-
-instance Applicative Content
-
-instance Monad Content where
-    return = Terminal
-    Terminal a >>= f = f a
-    NonTerminal (Document ident cs) >>= f =  NonTerminal (Document ident (map (>>= f) cs))

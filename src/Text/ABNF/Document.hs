@@ -13,7 +13,6 @@ module Text.ABNF.Document
     -- * Document types
     -- | Re-exported from "Text.ABNF.Document.Types"
       Document(..)
-    , Content(..)
     -- * Reducing documents
     -- | Re-exported from "Text.ABNF.Document.Operations"
     --
@@ -26,7 +25,6 @@ module Text.ABNF.Document
     , filterDocument
     , squashDocument
     , squashDocumentOn
-    , squashContent
     , lookupDocument
     -- * Parsing documents
     -- | Re-exported from "Text.ABNF.Document.Parser"
@@ -35,13 +33,11 @@ module Text.ABNF.Document
     ) where
 
 import Text.ABNF.Document.Types ( Document(..)
-                                , Content(..)
                                 )
 
 import Text.ABNF.Document.Operations ( filterDocument
                                      , squashDocument
                                      , squashDocumentOn
-                                     , squashContent
                                      , lookupDocument
                                      )
 
