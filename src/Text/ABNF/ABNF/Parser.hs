@@ -31,7 +31,7 @@ identifier = Text.pack <$> do
     otherChars <- many $ alphaNumChar <|> char '-'
     pure (firstChar:otherChars)
 
--- | Convencience function to directly parse a list of rules.
+-- | Convenience function to directly parse a list of rules.
 -- This is equivalent to
 --
 -- @
