@@ -39,7 +39,7 @@ library
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.10,
                        text,
-                       megaparsec,
+                       megaparsec <6.0.0,
                        attoparsec,
                        containers
   hs-source-dirs:      src
