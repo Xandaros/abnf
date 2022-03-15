@@ -24,11 +24,12 @@ filterDocument :: forall a. (Document a -> Bool) -- ^ Predicate to check
                -> Maybe (Document a)             -- ^ Returns 'Nothing' if the
                                                  --   predicate fails, cascades
                                                  --   otherwise
-filterDocument pred term@(Terminal _) | pred term = Just term
-                                      | otherwise = Nothing
+filterDocument predicate term@(Terminal _) 
+  | predicate term = Just term
+  | otherwise = Nothing
 
-filterDocument pred doc@(Document ident conts)
-    | pred doc = Just . Document ident $ (catMaybes . fmap (filterDocument pred) $ conts)
+filterDocument predicate doc@(Document ident conts)
+    | predicate doc = Just . Document ident $ (catMaybes . fmap (filterDocument predicate) $ conts)
     | otherwise = Nothing
 
 -- | Squash all contents of a 'Document' into a single 'Terminal'
@@ -43,9 +44,9 @@ getContent (Document _ conts) = mconcat (fmap getContent conts)
 -- | Squash all contents of a 'Document' which matches the predicate
 -- See also 'squashDocument'
 squashDocumentOn :: forall a. Monoid a => (Document a -> Bool) -> Document a -> Document a
-squashDocumentOn pred doc@(Document ident conts)
-    | pred doc = squashDocument doc
-    | otherwise = Document ident (squashDocumentOn pred <$> conts)
+squashDocumentOn predicate doc@(Document ident conts)
+    | predicate doc = squashDocument doc
+    | otherwise = Document ident (squashDocumentOn predicate <$> conts)
 squashDocumentOn _ term@(Terminal _) = term
 
 -- | Looks up nested 'Document's with a particular identifier.
@@ -65,7 +66,7 @@ lookupDocument' :: forall a. Text.Text -- ^ Identifier to search for
                 -> Document a          -- ^ 'Document' to search in
                 -> [Document a]
 lookupDocument' _ (Terminal _) = []
-lookupDocument' ident (Document _ conts) = catMaybes $ go ident <$> conts
+lookupDocument' ident' (Document _ conts) = catMaybes $ go ident' <$> conts
     where
         go _     (Terminal _) = Nothing
         go ident doc@(Document ident2 _) | ident == ident2 = Just doc

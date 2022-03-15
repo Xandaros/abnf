@@ -72,8 +72,8 @@ inlineRulesProdSpec rulemap (ProductSpec reps) =
     ProductSpec $ inlineRulesRepetition rulemap <$> reps
 
 inlineRulesRepetition :: RuleMap -> Repetition -> Repetition
-inlineRulesRepetition rulemap (Repetition rep elem) =
-    Repetition rep $ inlineRulesElement rulemap elem
+inlineRulesRepetition rulemap (Repetition rep ele) =
+    Repetition rep $ inlineRulesElement rulemap ele
 
 inlineRulesElement :: RuleMap -> Element -> Element
 inlineRulesElement rulemap oldrule@(RuleElement' ruleName) =

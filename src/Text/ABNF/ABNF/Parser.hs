@@ -97,7 +97,7 @@ repeat = try asteriskNumbers <|> try singleNumber <|> pure (Repeat 1 (Just 1))
         singleNumber = Repeat 1 <$> (Just . read <$> some digitChar)
         asteriskNumbers = do
             firstNumber <- option 0 (read <$> some digitChar)
-            char '*'
+            _ <- char '*'
             secondNumber <- optional (read <$> some digitChar)
             pure $ Repeat firstNumber secondNumber
 
@@ -138,10 +138,10 @@ bin_val = num_val' 'b' binInt
         binInt = readBinInt <$> many (char '0' <|> char '1')
 
 dec_val :: Parser NumLit
-dec_val = num_val' 'd' readInt
+dec_val = num_val' 'd' parseInt
     where
-        readInt :: Parser Int
-        readInt = read <$> some digitChar
+        parseInt :: Parser Int
+        parseInt = read <$> some digitChar
 
 {-# WARNING hex_val "readHexInt is unsafe" #-}
 hex_val :: Parser NumLit
@@ -153,7 +153,7 @@ hex_val = num_val' 'x' hexInt
 
 num_val' :: Char -> Parser Int -> Parser NumLit
 num_val' c hexInt = do
-    char c
+    _ <- char c
     digits <- hexInt
     intLit digits <|> rangeLit digits <|> pure (IntLit [digits])
     where
@@ -166,7 +166,7 @@ num_val' c hexInt = do
 
         rangeLit :: Int -> Parser NumLit
         rangeLit startRange = do
-            char '-'
+            _ <- char '-'
             endRange <- hexInt
             pure $ RangeLit startRange endRange
 
