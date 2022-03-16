@@ -4,8 +4,8 @@ module ABNF where
 
 import Test.Tasty
 import Test.Tasty.HUnit
-import Text.Megaparsec
-import Text.Megaparsec.Text
+import Text.Megaparsec hiding (single)
+import Text.Megaparsec.Char
 import qualified Data.Text as T
 
 import Text.ABNF.ABNF.Parser

@@ -55,25 +55,25 @@ parseProdSpec (ProductSpec reps) =
 
 parseRepetition :: Repetition -> Parser [Document T.Text]
 -- any number of times
-parseRepetition (Repetition (Repeat 0 Nothing) elem) =
-    join <$> (many $ parseElem elem)
+parseRepetition (Repetition (Repeat 0 Nothing) ele) =
+    join <$> (many $ parseElem ele)
 -- Zero times
 parseRepetition (Repetition (Repeat 0 (Just 0)) _) = pure []
 -- Less than n times
-parseRepetition (Repetition (Repeat 0 (Just n)) elem) = do
-    el <- (Just <$> parseElem elem) <|> pure Nothing
+parseRepetition (Repetition (Repeat 0 (Just n)) ele) = do
+    el <- (Just <$> parseElem ele) <|> pure Nothing
     case el of
       Just el' -> liftA2 (++) (pure el')
-                    (parseRepetition (Repetition (Repeat 0 (Just (n-1))) elem))
+                    (parseRepetition (Repetition (Repeat 0 (Just (n-1))) ele))
       Nothing -> pure []
 -- Between n and m times
-parseRepetition (Repetition (Repeat n (Just m)) elem) =
-    liftA2 (++) (parseElem elem)
-                (parseRepetition (Repetition (Repeat (n-1) (Just (m-1))) elem))
+parseRepetition (Repetition (Repeat n (Just m)) ele) =
+    liftA2 (++) (parseElem ele)
+                (parseRepetition (Repetition (Repeat (n-1) (Just (m-1))) ele))
 -- At least n times
-parseRepetition (Repetition (Repeat n x) elem) =
-    liftA2 (++) (parseElem elem)
-                (parseRepetition (Repetition (Repeat (n-1) x) elem))
+parseRepetition (Repetition (Repeat n x) ele) =
+    liftA2 (++) (parseElem ele)
+                (parseRepetition (Repetition (Repeat (n-1) x) ele))
 
 parseElem :: Element -> Parser [Document T.Text]
 parseElem (RuleElement rule) = toList <$> parseRule rule <?> "Rule element"

@@ -2,7 +2,7 @@
 -- see http://haskell.org/cabal/users-guide/
 
 name:                abnf
-version:             0.4.1.0
+version:             0.5.0.0
 synopsis:            Parse ABNF and generate parsers for the specified document
 description:         You can use this library to parse an ABNF document and
                      generate a parser from that ABNF to read a document
@@ -34,12 +34,12 @@ library
                        Text.ABNF.Document.Types,
                        Text.ABNF.Document.Operations,
                        Text.ABNF.PrettyPrinter
-  ghc-options:         -W
+  ghc-options:         -Wall
   -- other-modules:       
   -- other-extensions:    
-  build-depends:       base >=4.8 && <4.10,
+  build-depends:       base >=4.8 && <5,
                        text,
-                       megaparsec <6.0.0,
+                       megaparsec >=9.0.0 && <10.0.0,
                        attoparsec,
                        containers
   hs-source-dirs:      src
@@ -52,7 +52,7 @@ test-suite test
                        Document,
                        Util
   hs-source-dirs:      test
-  build-depends:       base >= 4.8 && <4.10,
+  build-depends:       base >= 4.8 && <5,
                        text,
                        containers,
                        test-framework,

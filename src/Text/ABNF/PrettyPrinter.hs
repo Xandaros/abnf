@@ -41,8 +41,7 @@ instance Pretty ProductSpec where
         intersperse " " (map prettyShow reps)
 
 instance Pretty Repetition where
-    prettyShow (Repetition repeat elem) = prettyShow repeat
-                                       ++ prettyShow elem
+    prettyShow (Repetition rep ele) = prettyShow rep ++ prettyShow ele
 
 instance Pretty Repeat where
     prettyShow (Repeat 1 (Just 1)) = ""
