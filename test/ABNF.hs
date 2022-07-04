@@ -44,6 +44,8 @@ abnfTests = testGroup "ABNF Parser"
                 (Repetition (Repeat 1 (Just 2)) wsElement)
           , testCase "1-* times" $ testRep "1*%x20"
                 (Repetition (Repeat 1 Nothing) wsElement)
+          , testCase "7 times" $ testRep "7%x20"
+                (Repetition (Repeat 7 (Just 7)) wsElement)
           , testCase "* times" $ testRep "*%x20"
                 (Repetition (Repeat 0 Nothing) wsElement)
           ]

@@ -94,7 +94,7 @@ repetition = Repetition <$> repeat <*> element
 repeat :: Parser Repeat
 repeat = try asteriskNumbers <|> try singleNumber <|> pure (Repeat 1 (Just 1))
     where
-        singleNumber = Repeat 1 <$> (Just . read <$> some digitChar)
+        singleNumber = (\r -> Repeat r (Just r)) . read <$> some digitChar
         asteriskNumbers = do
             firstNumber <- option 0 (read <$> some digitChar)
             _ <- char '*'
